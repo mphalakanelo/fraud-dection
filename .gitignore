@@ -1,0 +1,6 @@
+# Ignore dataset and unnecessary files  
+data/  
+models/  
+__pycache__/  
+.DS_Store  
+*.ipynb_checkpoints  
