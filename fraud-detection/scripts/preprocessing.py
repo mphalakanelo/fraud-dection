@@ -44,6 +44,6 @@ def preprocess_data(file_path):
     return X_train, X_test, y_train, y_test
 
 if __name__ == "__main__":
-    file_path = "fraud-dection/data/creditcard.csv"  # Update with correct path
+    file_path = "C:/Users/Kanelo/fraud-dection/fraud-detection/data/creditcard.csv"  # Update with correct path
     X_train, X_test, y_train, y_test = preprocess_data(file_path)
     print("Data preprocessing completed successfully!")
