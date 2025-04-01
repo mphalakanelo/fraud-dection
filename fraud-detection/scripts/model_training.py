@@ -1,31 +1,37 @@
-import pandas as pd
+import os
 import joblib
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from preprocessing import preprocess_data
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-def train_model(X_train, y_train):
-    model = LogisticRegression()
-    model.fit(X_train, y_train)
-    return model
+# Define file paths
+file_path = "C:/Users/Kanelo/fraud-dection/fraud-detection/data/creditcard.csv"
+model_path = "C:/Users/Kanelo/fraud-dection/fraud-detection/models/fraud_detection_model.pkl"
 
-def evaluate_model(model, X_test, y_test):
-    y_pred = model.predict(X_test)
-    metrics = {
-        'accuracy': accuracy_score(y_test, y_pred),
-        'precision': precision_score(y_test, y_pred),
-        'recall': recall_score(y_test, y_pred),
-        'f1_score': f1_score(y_test, y_pred)
-    }
-    return metrics
+# Ensure the models directory exists
+os.makedirs(os.path.dirname(model_path), exist_ok=True)
 
-def save_model(model, filename='fraud_model.pkl'):
-    joblib.dump(model, filename)
-    print(f"Model saved as {filename}")
+# Preprocess data
+X_train, X_test, y_train, y_test = preprocess_data(file_path)
 
-if __name__ == "__main__":
-    X_train, X_test, y_train, y_test = preprocess_data()
-    model = train_model(X_train, y_train)
-    metrics = evaluate_model(model, X_test, y_test)
-    print("Model Evaluation Metrics:", metrics)
-    save_model(model)
+# Train the model
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+print(f"✅ Model trained successfully! Accuracy: {accuracy:.4f}")
+
+# Print classification report and confusion matrix
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+# Save the model
+joblib.dump(model, model_path)
+print(f"✅ Model saved to {model_path}")

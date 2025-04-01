@@ -43,7 +43,8 @@ def preprocess_data(file_path):
     
     return X_train, X_test, y_train, y_test
 
+# 🚀 Prevent execution when imported into model_training.py
 if __name__ == "__main__":
-    file_path = "C:/Users/Kanelo/fraud-dection/fraud-detection/data/creditcard.csv"  # Update with correct path
+    file_path = "C:/Users/Kanelo/fraud-dection/fraud-detection/data/creditcard.csv"
     X_train, X_test, y_train, y_test = preprocess_data(file_path)
-    print("Data preprocessing completed successfully!")
+    print("✅ Data preprocessing completed successfully!")
