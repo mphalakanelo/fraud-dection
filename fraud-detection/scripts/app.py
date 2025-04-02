@@ -24,54 +24,66 @@ except FileNotFoundError:
 
 # Function to preprocess data
 def preprocess_data(df):
-    df = df.dropna()  # Drop missing values
-
-    # Scale features using StandardScaler
-    scaler = StandardScaler()
-    df.iloc[:, :-1] = scaler.fit_transform(df.iloc[:, :-1])
-
+    df = df.copy()
+    
+    # Handle missing values by filling with median
+    df.fillna(df.median(), inplace=True)
+    
+    # Ensure all features are numerical
+    df = df.select_dtypes(include=['number'])
+    
+    if 'Class' not in df.columns:
+        st.error("Dataset must contain a 'Class' column.")
+        st.stop()
+    
     # Split features and target
     X = df.drop(columns=['Class'])
     y = df['Class']
-
+    
+    # Scale numerical features
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
     # Balance dataset using SMOTE
     smote = SMOTE()
-    X_resampled, y_resampled = smote.fit_resample(X, y)
-
+    X_resampled, y_resampled = smote.fit_resample(X_scaled, y)
+    
     return X_resampled, y_resampled
 
-#  display confusion matrix and classification report
+# Display confusion matrix and classification report
 def display_metrics(y_true, y_pred):
     st.subheader("Classification Report")
     st.text(classification_report(y_true, y_pred))
-
+    
     st.subheader("Confusion Matrix")
-    cm = confusion_matrix(y_true, y_pred)
-    st.write(cm)
+    st.write(confusion_matrix(y_true, y_pred))
 
 # Streamlit app
 def main():
     st.title("Fraud Detection with Machine Learning")
-
+    
     st.sidebar.header("Upload CSV File")
     uploaded_file = st.sidebar.file_uploader("Choose a CSV file", type=["csv"])
-
+    
     if uploaded_file is not None:
-        df = pd.read_csv(uploaded_file)
-
+        try:
+            df = pd.read_csv(uploaded_file, encoding='utf-8')
+        except UnicodeDecodeError:
+            df = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
+        
         # Display the dataset
         st.subheader("Dataset Preview")
         st.write(df.head())
-
+        
         # Preprocess the data
         X, y = preprocess_data(df)
-
+        
         # Train/Test split
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
+        
         # Make predictions
         y_pred = model.predict(X_test)
-
+        
         # Display performance metrics
         display_metrics(y_test, y_pred)
 
