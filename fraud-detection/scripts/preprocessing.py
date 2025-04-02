@@ -32,7 +32,7 @@ def preprocess_data(file_path):
     df = normalize_features(df)
     
     # Splitting features and labels
-    X = df.drop(columns=['Class'])  # Assuming 'Class' is the target variable
+    X = df.drop(columns=['Class'])  
     y = df['Class']
     
     # Balancing the dataset

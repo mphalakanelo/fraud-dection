@@ -4,11 +4,11 @@ from preprocessing import preprocess_data
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-# Define file paths
+# file paths
 file_path = "C:/Users/Kanelo/fraud-dection/fraud-detection/data/creditcard.csv"
 model_path = "C:/Users/Kanelo/fraud-dection/fraud-detection/models/fraud_detection_model.pkl"
 
-# Ensure the models directory exists
+# check models directory 
 os.makedirs(os.path.dirname(model_path), exist_ok=True)
 
 # Preprocess data

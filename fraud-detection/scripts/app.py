@@ -10,7 +10,6 @@ from sklearn.metrics import classification_report, confusion_matrix
 from imblearn.over_sampling import SMOTE
 from sklearn.preprocessing import StandardScaler
 
-# Get the directory of the current script
 base_dir = os.path.dirname(__file__)
 
 # Construct the relative path to the model
@@ -41,7 +40,7 @@ def preprocess_data(df):
 
     return X_resampled, y_resampled
 
-# Function to display confusion matrix and classification report
+#  display confusion matrix and classification report
 def display_metrics(y_true, y_pred):
     st.subheader("Classification Report")
     st.text(classification_report(y_true, y_pred))
